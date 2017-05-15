@@ -97,7 +97,7 @@ for note in minorNotes:
     minorNotes.add(note)
 majorNotes = {69,69,69,71,73,73,73,74,76,78,80,81}
 
-minorArpegs = {(69,72,76),(69,72,76),(69,72,76),(76,72,76,71,76,69),(76,75,74),(69,71,72,71,72),(69,72,76),(71,74,77),(72,76,79)}
+minorArpegs = {(69,72,76),(69,72,76),(69,72,76),(69,70,71,72),(76,72,76,71,76,69),(76,75,74),(69,71,72,71,72),(69,72,76),(71,74,77),(72,76,79)}
 
 minorGroup1 = {(69,71,72,71),(76,77,76,74),(79,79,81,76),(76,71,72,69)}
 
@@ -110,7 +110,7 @@ tempTrack = b''
 for i in range(0,8):
     randNotes = random.sample(minorArpegs,1)[0]
     for note in randNotes:
-        tempTrack += notes.playNote(note,100)
+        tempTrack += notes.playNote(note,50 + random.randint(0,2) * 50)
 
 
 

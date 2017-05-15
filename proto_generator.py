@@ -62,6 +62,8 @@ f.write(DIVISION)
 
 f.write(TRACK_ID)
 
+
+
 ##CREATE DATA. AFTER DATA IS CREATED, COUNT BYTES, WRITE LENGTH TO FILE, AND THEN WRITE DATA.
 trk1 = b''
 
@@ -86,6 +88,8 @@ trk1 += b'\x00\xc0\x51'
 ####
 
 
+
+
 deltas = [0,2,1,2,2,1,2,2]
 # minorScale = [69,71,72,74,76,77,79,81]
 
@@ -103,16 +107,18 @@ minorGroup1 = {(69,71,72,71),(76,77,76,74),(79,79,81,76),(76,71,72,69)}
 
 timeIntervals = {150,150,150,150,300,450,600,75}
 
+testSet1 = {(18,19,20,25,30,30),(80,85,90,95,96,97,98,99,100,100,100,100,90,90,90,90)}
 
 import random
 
 tempTrack = b''
-for i in range(0,8):
-    randNotes = random.sample(minorArpegs,1)[0]
-    for note in randNotes:
-        tempTrack += notes.playNote(note,50 + random.randint(0,2) * 50)
+# for i in range(0,8):
+#     randNotes = random.sample(testSet1,1)[0]
+#     for note in randNotes:
+#         tempTrack += notes.playNote(note,50 + random.randint(0,2) * 50)
 
 
+tempTrack += notes.playNote(50,600)
 
 
 
@@ -131,7 +137,7 @@ for i in range(0,8):
     # randNote = random.sample(minorNotes,1)[0]
     # tempTrack += notes.playNote(randNote,time)
 
-trk1 += tempTrack + tempTrack
+trk1 += tempTrack
 #
 # trk1 += notes.playNote(74,200)
 # trk1 += notes.playNote(75,200)
@@ -165,9 +171,14 @@ trk1 += END_TRACK
 tracklength = len(trk1)
 #trklength = (tracklength).to_bytes(4, byteorder='big')
 trklength = notes.toBytes(tracklength,4)
+for b in trklength:
+    print ord(b),
 
 f.write(trklength)
 f.write(trk1)
+
+for b in trk1:
+    print ord(b),
 
 f.close()
 os.startfile("C:\\Users\\Vasia\\Documents\\PycharmProjects\\MidiMozart\\midi\\sample.mid")

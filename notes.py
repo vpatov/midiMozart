@@ -89,3 +89,39 @@ def noteToInt(note):
     octave = int(note[1])
     offset = 0
 
+
+def midi_header():
+    ##HEADER BYTE CONSTANTS
+    HEADER_ID = b'MThd'
+
+    HEADER_LENGTH = b'\x00\x00\x00\x06'
+
+    FORMAT_0 = b'\x00\x00'
+    FORMAT_1 = b'\x00\x01'
+    FORMAT_2 = b'\x00\x02'
+
+    numTracks = 1
+    # NUM_TRK_CHUNKS = (numTracks).to_bytes(2, byteorder='big')
+    NUM_TRK_CHUNKS = struct.pack('>H', numTracks)
+
+    division = 300
+    # DIVISION = (division).to_bytes(2,byteorder='big')
+    DIVISION = struct.pack('>H', division)
+    ##END HEADER BYTE CONSTANTS
+
+
+    ##TRACK BYTE CONSTANTS
+    TRACK_ID = b'MTrk'
+    END_TRACK = b'\x00\xff\x2f\x00'
+    ##END TRACK BYTE CONSTANTS
+
+    trk1 = HEADER_ID + HEADER_LENGTH + FORMAT_0 + NUM_TRK_CHUNKS + DIVISION + TRACK_ID
+
+
+
+    ##CREATE DATA. AFTER DATA IS CREATED, COUNT BYTES, WRITE LENGTH TO FILE, AND THEN WRITE DATA.
+
+
+
+    return trk1
+

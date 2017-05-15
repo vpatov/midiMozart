@@ -24,7 +24,7 @@ units per beat. For example, +96 would mean 96 ticks per beat. If the value
 is negative, delta times are in SMPTE compatible units.
 
 """
-
+import sys
 format = None
 numTracks = None
 division = None
@@ -58,7 +58,7 @@ def readChunk(f):
                 return length
             except:
                 print ("Improperly formatted file. Exiting...")
-                exit(1)
+                sys.exit(1)
 
     except:
         print("Improperly formatted chunk")
@@ -81,7 +81,7 @@ def readHeader(f):
 
     except:
         print("Improperly formatted header. Exiting...")
-        exit(1)
+        sys.exit(1)
 
 
 
@@ -107,7 +107,7 @@ def readTrack(f):
 
     except:
         print("Improperly formatted chunk. Exiting...")
-        exit(1)
+        sys.exit(1)
 
 
 def readEvent(f):
@@ -115,7 +115,7 @@ def readEvent(f):
         pass
     except:
         print("Improperly formatted chunk. Exiting...")
-        exit(1)
+        sys.exit(1)
 
 def main():
     f = open('midi/input1.mid', 'rb')

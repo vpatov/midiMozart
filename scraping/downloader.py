@@ -27,7 +27,7 @@ def get_tab_download_pages():
                 batch = scraper.get_tab_download_page_links(response)
 
                 for tab in batch:
-                    tab_file.write(tab[0] +' , ' + tab[1] + '\n')
+                    tab_file.write(tab[0] +',' + tab[1] + ',' + artist + '\n')
                 print "wrote page",page_num,"of", artist
                 page_num += 1
             except Exception as e:
@@ -37,7 +37,14 @@ def get_tab_download_pages():
     tab_file.close()
 
 def download_tabs():
-    tabs_to_download = open('')
+    tabs_to_download = open('tab_download_links.txt')
+    for line in tabs_to_download:
+        parts = line.split(',')
+        link = parts[0]
+        name = parts[1]
+        status,response = http.request(link)
+        print response
+        exit()
 
 
 scraped = 0
@@ -52,7 +59,7 @@ def get_tab_download_links():
     for line in tab_file:
         num_lines += 1
         parts = line.split(',')
-        tab_download_pages_set.add((parts[0].strip(),parts[1].strip()))
+        tab_download_pages_set.add((parts[0].strip(),parts[1].strip(),parts[2].strip()))
 
     num_removed = 0
     #read the list of tab download pages already scraped
@@ -62,29 +69,29 @@ def get_tab_download_links():
 
         name = parts[1].strip()
         link = parts[2].strip()
-        if ((link,name) in tab_download_pages_set):
-            tab_download_pages_set.remove((link,name))
+        artist = parts[3].strip()
+        if ((link,name,artist) in tab_download_pages_set):
+            tab_download_pages_set.remove((link,name,artist))
             num_removed += 1
 
     print "Already downloaded:",num_removed
-    print tab_download_pages_set
-    exit()
+
 
 
     tab_download_links = Queue.Queue()
 
-    for pair in tab_download_pages_set:
-        tab_download_pages.put(pair)
+    for group in tab_download_pages_set:
+        tab_download_pages.put(group)
 
     def get_tab_download_link():
         global scraped
         time.sleep(1)
         while (True):
             try:
-                link,song_name = tab_download_pages.get(timeout=10)
+                link,song_name,artist = tab_download_pages.get(timeout=10)
                 status,response = http.request(link)
                 download_link = scraper.get_tab_download_link(response)
-                tab_download_links.put((download_link,song_name,link))
+                tab_download_links.put((download_link,song_name,link,artist))
                 if (scraped % 10 == 0 and scraped != 0) or (scraped < 10):
                     print "Scraped",scraped,'...'
                 scraped += 1
@@ -96,8 +103,8 @@ def get_tab_download_links():
     def write_tab_download_links():
         while (True):
             try:
-                link,song_name,page_link = tab_download_links.get(timeout=20)
-                tab_download_links_file.write(link.strip() + ',' + song_name.strip() + ',' + page_link.strip() + '\n')
+                link,song_name,page_link,artist = tab_download_links.get(timeout=20)
+                tab_download_links_file.write(link.strip() + ',' + song_name.strip() + ',' + page_link.strip() + ',' + artist + '\n')
             except Exception as e:
                 print e
                 print "Should be done writing!"
@@ -121,8 +128,8 @@ def get_tab_download_links():
 
 
 
+# get_tab_download_pages()
+get_tab_download_links()
 
 
-
-download_tabs()
 

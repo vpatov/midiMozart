@@ -88,6 +88,7 @@ def get_tab_download_links():
         time.sleep(1)
         while (True):
             try:
+                print 'trying'
                 link,song_name,artist = tab_download_pages.get(timeout=10)
                 status,response = http.request(link)
                 download_link = scraper.get_tab_download_link(response)
@@ -99,6 +100,7 @@ def get_tab_download_links():
             except Exception as e:
                 print e
                 print "Should be done scraping!"
+                exit()
 
     def write_tab_download_links():
         while (True):
@@ -109,6 +111,7 @@ def get_tab_download_links():
                 print e
                 print "Should be done writing!"
                 tab_download_links_file.close()
+                exit()
 
     def wrapup():
         print "wrapping up"

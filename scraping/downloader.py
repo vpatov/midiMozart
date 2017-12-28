@@ -4,6 +4,8 @@ import time
 import threading
 import Queue
 import signal
+import os
+import re
 
 
 
@@ -41,10 +43,26 @@ def download_tabs():
     for line in tabs_to_download:
         parts = line.split(',')
         link = parts[0]
+        if link == 'broken':
+            continue
         name = parts[1]
-        status,response = http.request(link)
-        print response
-        exit()
+        page_link = parts[2]
+        artist = parts[3]
+        filename = 'tabs/' + artist.strip()+'-'+name
+        try:
+            f = open(filename,'r')
+            f.close()
+            print filename,'already downloaded'
+        except IOError as e:
+            print 'downloading',filename
+            status, response = http.request(link)
+            f = open(filename,'wb')
+            f.write(response)
+            f.close()
+            time.sleep(4)
+
+
+
 
 
 scraped = 0
@@ -132,7 +150,8 @@ def get_tab_download_links():
 
 
 # get_tab_download_pages()
-get_tab_download_links()
+# get_tab_download_links()
+download_tabs()
 
 
 

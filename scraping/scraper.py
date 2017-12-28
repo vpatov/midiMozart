@@ -6,7 +6,7 @@ url_pattern = re.compile(r'[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0
 song_reg = re.compile(r'\(ver \d+\)')
 int_reg = re.compile(r'\d+')
 
-tab_download_link = 'https://tabs.ultimate-guitar.com/tabs/download?id=972187&session_id=8d03d867b49af197aa41ef3a71f76daa'
+#tab_download_link = 'https://tabs.ultimate-guitar.com/tabs/download?id=972187&session_id=8d03d867b49af197aa41ef3a71f76daa'
 
 def tab_download_link(id):
     return 'https://tabs.ultimate-guitar.com/tabs/download?id=' + \
@@ -78,6 +78,6 @@ def get_tab_download_link(tab_source):
         id = div.find('input',{'id':'tab_id'})
         return tab_download_link(id.get('value'))
     except Exception as e:
-        print e
+        print(e)
     return 'broken'
 

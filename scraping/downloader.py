@@ -1,8 +1,8 @@
 import httplib2
-import scraper
+from scraping import scraper
 import time
 import threading
-import Queue
+import queue
 import signal
 import os
 import re
@@ -30,10 +30,10 @@ def get_tab_download_pages():
 
                 for tab in batch:
                     tab_file.write(tab[0] +',' + tab[1] + ',' + artist + '\n')
-                print "wrote page",page_num,"of", artist
+                print("wrote page",page_num,"of", artist)
                 page_num += 1
             except Exception as e:
-                print e
+                print(e)
                 tab_file.close()
 
     tab_file.close()
@@ -52,9 +52,9 @@ def download_tabs():
         try:
             f = open(filename,'r')
             f.close()
-            print filename,'already downloaded'
+            print(filename,'already downloaded')
         except IOError as e:
-            print 'downloading',filename
+            print('downloading',filename)
             status, response = http.request(link)
             f = open(filename,'wb')
             f.write(response)
@@ -71,7 +71,7 @@ def get_tab_download_links():
     #read the tab_download_page_links
     tab_file = open('tab_links.txt','r')
     tab_download_links_file = open('tab_download_links.txt','a')
-    tab_download_pages = Queue.Queue()
+    tab_download_pages = queue.Queue()
     tab_download_pages_set = set()
     num_lines = 0
     for line in tab_file:
@@ -92,11 +92,11 @@ def get_tab_download_links():
             tab_download_pages_set.remove((link,name,artist))
             num_removed += 1
 
-    print "Already downloaded:",num_removed
+    print("Already downloaded:",num_removed)
 
 
 
-    tab_download_links = Queue.Queue()
+    tab_download_links = queue.Queue()
 
     for group in tab_download_pages_set:
         tab_download_pages.put(group)
@@ -106,18 +106,18 @@ def get_tab_download_links():
         time.sleep(1)
         while (True):
             try:
-                print 'trying'
+                print('trying')
                 link,song_name,artist = tab_download_pages.get(timeout=10)
                 status,response = http.request(link)
                 download_link = scraper.get_tab_download_link(response)
                 tab_download_links.put((download_link,song_name,link,artist))
                 if (scraped % 10 == 0 and scraped != 0) or (scraped < 10):
-                    print "Scraped",scraped,'...'
+                    print("Scraped",scraped,'...')
                 scraped += 1
 
             except Exception as e:
-                print e
-                print "Should be done scraping!"
+                print(e)
+                print("Should be done scraping!")
                 exit()
 
     def write_tab_download_links():
@@ -126,13 +126,13 @@ def get_tab_download_links():
                 link,song_name,page_link,artist = tab_download_links.get(timeout=20)
                 tab_download_links_file.write(link.strip() + ',' + song_name.strip() + ',' + page_link.strip() + ',' + artist + '\n')
             except Exception as e:
-                print e
-                print "Should be done writing!"
+                print(e)
+                print("Should be done writing!")
                 tab_download_links_file.close()
                 exit()
 
     def wrapup():
-        print "wrapping up"
+        print("wrapping up")
         tab_download_links_file.close()
         exit()
 
@@ -141,7 +141,7 @@ def get_tab_download_links():
     signal.signal(signal.SIGABRT, wrapup)
 
     #setup threads
-    for i in range(0,1):
+    for i in range(0,4):
         t = threading.Thread(target=get_tab_download_link)
         t.start()
     t = threading.Thread(target=write_tab_download_links)

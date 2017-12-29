@@ -1,5 +1,5 @@
 import httplib2
-from scraping import scraper
+import scraper
 import time
 import threading
 import queue
@@ -12,17 +12,19 @@ import re
 http = httplib2.Http()
 user_agent = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_4; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.472.63 Safari/534.3'
 base_url = "https://www.ultimate-guitar.com"
-artists = set([i.strip() for i in open('artists.txt','r').read().split('\n')])
+artists = set([i.strip() for i in open('artists.txt','r').readlines()])
 
 def artist_url(band_name,page_num):
     return base_url + '/tabs/' + band_name.strip().replace(' ','_') + '_tabs' + str(page_num) + '.htm'
 
 def get_tab_download_pages():
+    global artists
     tab_file = open('tab_links.txt','w')
     for artist in artists:
         page_num = 0
         while (True):
             try:
+                time.sleep(2)
                 status, response = http.request(artist_url(artist,page_num))
                 if (len(response) < 8000):
                     break
@@ -49,17 +51,17 @@ def download_tabs():
         page_link = parts[2]
         artist = parts[3]
         filename = 'tabs/' + artist.strip()+'-'+name
-        try:
-            f = open(filename,'r')
-            f.close()
+        if (os.path.isfile(filename)):
             print(filename,'already downloaded')
-        except IOError as e:
+        else:
             print('downloading',filename)
             status, response = http.request(link)
             f = open(filename,'wb')
             f.write(response)
             f.close()
             time.sleep(4)
+
+            
 
 
 
@@ -151,7 +153,7 @@ def get_tab_download_links():
 
 # get_tab_download_pages()
 # get_tab_download_links()
-download_tabs()
+# download_tabs()
 
 
 

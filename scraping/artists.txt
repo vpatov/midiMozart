@@ -134,7 +134,6 @@ Poison the Well
 The Showdown
 Textures
 Atheist
-Queensrÿche
 Mudvayne
 The Safety Fire
 Biomechanical
@@ -477,13 +476,12 @@ Vanna
 A Tragedy in Progress
 Knights of the Abyss
 Odd Project
-Týr
 Kublai Khan
 Miss May I
 Devil You Know
 I Declare War
 Enchant
-King's X
+Kings X
 Falling in Reverse
 Threshold
 Lamb of God
@@ -527,7 +525,7 @@ Rorschach
 Straight Line Stitch
 The Red Shore
 Crystal Lake
-Myka, Relocate
+Myka Relocate
 This Day Forward
 The Dillinger Escape Plan
 All Out War
@@ -561,7 +559,7 @@ Jamie's Elsewhere
 The Afterimage
 Maroon
 Cancer Bats
-Behold... The Arctopus
+Behold The Arctopus
 Crimson Glory
 Architects
 Atreyu
